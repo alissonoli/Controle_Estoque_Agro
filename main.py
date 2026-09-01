@@ -8,13 +8,14 @@ while True:
    print("1 - Cadastrar produto")
    print("2 - Listar produtos")
    print("3 - Adicionar produto ao estoque")
+   print("5 - Registrar venda")
    print("4 - Remover produto do estoque")
-   print("5 - Buscar produto no estoque")
-   print("6 - Sair do sistema")
+   print("6 - Buscar produto no estoque")
+   print("7 - Sair do sistema")
 
    opcao = input("Escolha uma opção: ")
 
-   if opcao == "0":
+   if opcao == "7":
       print("Saindo do sistema...")
       break
 
@@ -58,10 +59,18 @@ while True:
       nome = input("Digite o nome do produto: ")
       quant = int(input("Digite a quantidade a ser adicionada: "))
 
+      encontrado = False
+
       for produto in produtos:
-         if produto["nome"] == nome:
+         if produto["nome"].lower() == nome.lower():
             produto["quantidade"] += quant
             print(f"Adicionado {quant} unidades ao produto {nome}.") 
+
+            encontrado = True
+            break
+
+      if not encontrado:
+         print(f"Produto {nome} não encontrado no estoque.")
 
    elif opcao == "4":
 
