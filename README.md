@@ -7,6 +7,7 @@ Sistema de controle de estoque para uma Agropecuária desenvolvido usando Python
 - Cadastrar produtos
 - Listar produtos
 - Adicionar produtos ao estoque
+- Rfeistrar vendas
 - Remover produtos do estoque
 - Buscar produtos
 
