@@ -8,8 +8,8 @@ while True:
    print("1 - Cadastrar produto")
    print("2 - Listar produtos")
    print("3 - Adicionar produto ao estoque")
-   print("5 - Registrar venda")
    print("4 - Remover produto do estoque")
+   print("5 - Registrar venda")
    print("6 - Buscar produto no estoque")
    print("7 - Sair do sistema")
 
@@ -76,4 +76,56 @@ while True:
 
       print("=== REMOVER PRODUTO ===")
 
-      
+      nome = input("Digite o nome do produto que deseja excluir: ")
+      quant = int(input("Digite a quantidade a ser removida: "))
+
+      encontrado = False
+
+      for produto in produtos:
+         if produto["nome"].lower() == nome.lower():
+
+            encontrado = True
+
+            if produto["quantidade"] >= quant:
+
+               produto["quantidade"] -= quant
+
+               print(f"Removido {quant} unidades do produto {nome}.")
+
+            else:
+               print(f"Quantidade insuficiente do produto {nome}.")
+            break
+
+      if not encontrado:
+         print(f"Produto {nome} não encontrado no estoque.")
+
+   elif opcao == "5":
+
+      print("=== REGISTRAR VENDA ===")
+
+      nome = input("Digite o nome do produto vendido: ")
+      quant = int(input("Digite a quantidade vendida: "))
+
+      encontrado = False
+
+      for produto in produtos:
+         if produto["nome"].lower() == nome.lower():
+
+            encontrado = True
+
+            if produto["quantidade"] >= quant:
+
+               produto["quantidade"] -= quant
+
+               print(f"Produto {nome} vendido com sucesso! Quantidade vendiada: {quant}.")
+               print(f"Quantidade restante no estoque: {produto['quantidade']}.")
+
+            else:
+               print(f"Quantidade insuficiente do produto {nome}.")
+               break
+
+            if not encontrado:
+               print(f"Produto {nome} não encontrado no estoque.")
+
+
+
