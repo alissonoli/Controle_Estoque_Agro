@@ -42,11 +42,11 @@ def adicionar_produto():
       
    for produto in produtos:
       if produto["nome"].lower() == nome.lower():
-       produto["quantidade"] += quant
-      print(f"Adicionado {quant} unidades ao produto {nome}.") 
+        produto["quantidade"] += quant
+        print(f"Adicionado {quant} unidades ao produto {nome}.") 
       
-      encontrado = True
-      break
+        encontrado = True
+        break
       
    if not encontrado:
         print(f"Produto {nome} não encontrado no estoque.")
@@ -106,11 +106,31 @@ def registrar_venda():
 
    if not encontrado:
     print(f"Produto {nome} não encontrado no estoque.")
-   
-   
-while True:
 
-   print("===== CONTROLE DE ESTOQUE =====")
+def buscar_produtos():
+   print("=== BUSCAR PRODUTO ===")
+
+   nome = input("Digite o nome do produto: ")
+
+   encontrado = False
+
+   for produto in produtos:
+      if produto["nome"].lower() == nome.lower():
+         encontrado = True
+         print(f"""
+         Produto: {produto["nome"]}
+         Quantidade: {produto["quantidade"]}
+         Preço: R$ {produto["preco"]:.2f}
+         Validade: {produto["validade"]}
+         """)
+         break
+
+   if not encontrado:
+      print(f"O produto {nome} não existe no estoque.")
+
+while True:
+   
+   print("\n===== CONTROLE DE ESTOQUE =====")
    print("Agropecuária São Judas Tadeu")
 
    print("1 - Cadastrar produto")
@@ -142,5 +162,6 @@ while True:
    elif opcao == "5":
       registrar_venda()
 
-    
+   elif opcao == "6":
+      buscar_produtos()
 
