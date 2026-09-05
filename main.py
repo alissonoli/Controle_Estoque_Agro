@@ -1,12 +1,53 @@
 produtos = []
 
+def pedir_nome(mensagem):
+   while True:
+      nome = input(mensagem).strip()
+
+      if nome == "":
+         print("Erro: o nome do produto não pode estar vazio.")
+         continue
+
+      return nome
+
+def pedir_quantidade(mensagem):
+   while True:
+      try:
+         quant = int(input(mensagem))
+
+         if quant < 0:
+            print("Erro: A quantidade deve ser maior que zero.")
+            continue
+
+         return quant
+
+      except ValueError:
+         print("Erro: Digite apenas números.")
+
+def pedir_preco(mensagem):
+   while True:
+      try:
+         preco = float(input(mensagem))
+
+         if preco < 0:
+            print("Erro: O preço deve ser maior que zero.")
+            continue
+
+         return preco
+
+      except ValueError:
+         print("Erro: Digite apenas números.")
+
 def cadastrar_produto():
    print("=== CADASTRO ===")
    
-   nome = input("Digite o nome do produto: ")
-   quant = int(input("Digite a quantidade: "))
-   preco = float(input("Digite o preço: "))
-   val = input("Digite a validade do produto (dd/mm/aaaa): ")
+   nome = pedir_nome("Digite o nome do produto: ")
+   try: 
+    quant = pedir_quantidade("Digite a quantidade: ")
+    preco = pedir_preco("Digite o preço: ")
+    val = input("Digite a validade do produto (dd/mm/aaaa): ")
+   except ValueError:
+      print("Erro: Digite apenas números.")
    
    produtos.append({
    "nome": nome, 
@@ -18,10 +59,10 @@ def cadastrar_produto():
    print(f"Produto {nome}, com {quant} unidades, com valor R$ {preco} e validade {val} cadastrado com sucesso!")
 
 def listar_produtos():
-   print("=== LISTA DE PRODUTOS ===")
+   print("=== PRODUTOS DO ESTOQUE ===")
    
    if len(produtos) == 0:
-     print("Nenhum produto cadastrado.")
+     print("Estoque vazio.")
    
    else:
     for produto in produtos:
@@ -35,9 +76,8 @@ def listar_produtos():
 def adicionar_produto():
    print("=== ADICIONAR PRODUTO AO ESTOQUE ===")
       
-   nome = input("Digite o nome do produto: ")
-   quant = int(input("Digite a quantidade a ser adicionada: "))
-      
+   nome = pedir_nome("Digite o nome do produto: ")
+   quant = pedir_quantidade("Digite a quantidade a ser adicionada: ")
    encontrado = False
       
    for produto in produtos:
@@ -54,8 +94,8 @@ def adicionar_produto():
 def remover_produto():
    print("=== REMOVER PRODUTO ===")
    
-   nome = input("Digite o nome do produto que deseja excluir: ")
-   quant = int(input("Digite a quantidade a ser removida: "))
+   nome = pedir_nome("Digite o nome do produto que deseja excluir: ")
+   quant = pedir_quantidade("Digite a quantidade a ser removida: ")
    
    encontrado = False
    
@@ -80,10 +120,8 @@ def remover_produto():
 def registrar_venda():
    print("=== REGISTRAR VENDA ===")
    
-   nome = input("Digite o nome do produto vendido: ")
-   quant = int(input("Digite a quantidade vendida: "))
-   
-   encontrado = False
+   nome = pedir_nome("Digite o nome do produto vendido: ")
+   quant = pedir_quantidade("Digite a quantidade vendida: ")
 
    for produto in produtos:
 
@@ -110,7 +148,7 @@ def registrar_venda():
 def buscar_produtos():
    print("=== BUSCAR PRODUTO ===")
 
-   nome = input("Digite o nome do produto: ")
+   nome = pedir_nome("Digite o nome do produto: ")
 
    encontrado = False
 
@@ -164,4 +202,7 @@ while True:
 
    elif opcao == "6":
       buscar_produtos()
+
+   else:
+      print("Opção inválida. Digite de 1 a 7, por favor.")
 
