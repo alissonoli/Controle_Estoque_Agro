@@ -166,6 +166,56 @@ def buscar_produtos():
    if not encontrado:
       print(f"O produto {nome} não existe no estoque.")
 
+def editar_produto():
+   print("=== EDITAR PRODUTO ===")
+
+   nome = pedir_nome("Digite o nome do produto que deseja alterar: ")
+
+   print("O que deseja alterar?")
+   print("1 - Nome")
+   print("2 - Quantidade")
+   print("3 - Preço")
+   print("4 - Validade")
+
+   opcao = input("Escolha uma opção: ")
+
+   if opcao == "1":
+      for produto in produtos:
+         if produto["nome"].lower() == nome.lower():
+           novo_nome = input("Digite o novo nome:")
+
+           produto["nome"] = novo_nome
+
+           print(f"{nome} atualizado para {novo_nome}.")
+
+   elif opcao == "2":
+      for produto in produtos:
+         if produto["nome"].lower() == nome.lower():
+            nova_quant = pedir_quantidade("Digite a nova quantidade: ")
+
+            produto["quant"] = nova_quant
+
+            print(f"{nome} com a quantidade atualizada.")
+
+   elif opcao == "3":
+      for produto in produtos:
+         if produto["nome"].lower() == nome.lower():
+            novo_preco = pedir_preco("Digite o novo preço: ")
+
+            produto["preco"] = novo_preco
+
+            print(f"{nome} com o preço atualizado.")
+
+   elif opcao == "4":
+      for produto in produtos:
+         if produto["nome"].lower() == nome.lower():
+            nova_val = input("Digite a nova validade: ")
+
+            produto["val"] = nova_val
+
+            print(f"{nome} com a validade atualizada.")
+
+
 while True:
    
    print("\n===== CONTROLE DE ESTOQUE =====")
@@ -173,15 +223,16 @@ while True:
 
    print("1 - Cadastrar produto")
    print("2 - Listar produtos")
-   print("3 - Adicionar produto ao estoque")
-   print("4 - Remover produto do estoque")
+   print("3 - Adicionar produto")
+   print("4 - Remover produto")
    print("5 - Registrar venda")
-   print("6 - Buscar produto no estoque")
-   print("7 - Sair do sistema")
+   print("6 - Buscar produto")
+   print("7 - Editar produto")
+   print("8 - Sair do sistema")
 
    opcao = input("Escolha uma opção: ")
 
-   if opcao == "7":
+   if opcao == "8":
       print("Saindo do sistema...")
       break
 
@@ -203,6 +254,9 @@ while True:
    elif opcao == "6":
       buscar_produtos()
 
+   elif opcao == "7":
+      editar_produto()
+
    else:
-      print("Opção inválida. Digite de 1 a 7, por favor.")
+      print("Opção inválida. Digite de 1 a 8, por favor.")
 
