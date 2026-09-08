@@ -38,10 +38,20 @@ def pedir_preco(mensagem):
       except ValueError:
          print("Erro: Digite apenas números.")
 
+def encontrar_produto(nome):
+   for produto in produtos:
+         if produto["nome"].lower() == nome.lower():
+            return produto
+
+   return None
+
 def cadastrar_produto():
    print("=== CADASTRO ===")
    
    nome = pedir_nome("Digite o nome do produto: ")
+
+   produto = encontrar_produto(nome)
+
    try: 
     quant = pedir_quantidade("Digite a quantidade: ")
     preco = pedir_preco("Digite o preço: ")
@@ -77,45 +87,40 @@ def adicionar_produto():
    print("=== ADICIONAR PRODUTO AO ESTOQUE ===")
       
    nome = pedir_nome("Digite o nome do produto: ")
-   quant = pedir_quantidade("Digite a quantidade a ser adicionada: ")
-   encontrado = False
-      
-   for produto in produtos:
-      if produto["nome"].lower() == nome.lower():
-        produto["quantidade"] += quant
-        print(f"Adicionado {quant} unidades ao produto {nome}.") 
-      
-        encontrado = True
-        break
-      
-   if not encontrado:
+   produto = encontrar_produto(nome)
+
+   if produto:
+
+      quant = pedir_quantidade("Digite a quantidade a ser adicionada: ")
+      produto["quantidade"] += quant
+
+      print(f"Adicionado {quant} unidades ao produto {nome}.") 
+      print(f"Quantidade atual no estoque: {produto['quantidade']}")
+   
+   else:
         print(f"Produto {nome} não encontrado no estoque.")
 
 def remover_produto():
    print("=== REMOVER PRODUTO ===")
    
    nome = pedir_nome("Digite o nome do produto que deseja excluir: ")
-   quant = pedir_quantidade("Digite a quantidade a ser removida: ")
+   produto = encontrar_produto(nome)
+
+   if produto:
+
+      quant = pedir_quantidade("Digite a quantidade a ser removida: ")
+      if produto["quantidade"] >= quant:
+         produto["quantidade"] -= quant
    
-   encontrado = False
-   
-   for produto in produtos:
-      if produto["nome"].lower() == nome.lower():
-   
-       encontrado = True
-   
-       if produto["quantidade"] >= quant:
-   
-        produto["quantidade"] -= quant
-   
-        print(f"Removido {quant} unidades do produto {nome}.")
-   
+         print(f"Removido {quant} unidades do produto {nome}.")
+         print(f"Quantidade atual no estoque: {produto['quantidade']}")
+
       else:
-        print(f"Quantidade insuficiente do produto {nome}.")
-      break
-   
-   if not encontrado:
-            print(f"Produto {nome} não encontrado no estoque.")
+         print(f"Quantidade insuficiente do produto {nome}.")
+      
+   else:
+      print(f"Produto {nome} não encontrado no estoque.")
+      
 
 def registrar_venda():
    print("=== REGISTRAR VENDA ===")
@@ -214,6 +219,15 @@ def editar_produto():
             produto["val"] = nova_val
 
             print(f"{nome} com a validade atualizada.")
+
+   elif opcao == "5":
+      print("Edição cancelada.")
+
+   else:
+      print("Opção inválida.")
+
+   else:
+     print(f"O produto {nome} não foi encontrado no estoque.")
 
 
 while True:
