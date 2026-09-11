@@ -237,7 +237,22 @@ def relatorio_estoque():
 
    print(f"Produtos cadastrados: {total_produtos}.")
    print(f"Total de unidades: {total_unid}.")
-   print(f"Valor total do estoque: R${valor_tot}.")
+   print(f"Valor total do estoque: R${valor_tot:.2f}.")
+
+   print("\n= PRODUTOS COM ESTOQUE BAIXO ===")
+
+   limite = 5
+
+   for produto in produtos:
+      if produto["quantidade"] <= limite:
+         print(f"{produto['nome']} - {produto['quantidade']} unidades.")
+
+         encontrou_baixo = True
+
+   if not encontrado:
+      print("Nenhum produto com estoque baixo.")
+
+
    
 while True:
    
