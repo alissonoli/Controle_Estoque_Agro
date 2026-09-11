@@ -15,7 +15,7 @@ def pedir_quantidade(mensagem):
       try:
          quant = int(input(mensagem))
 
-         if quant < 0:
+         if quant <= 0:
             print("Erro: A quantidade deve ser maior que zero.")
             continue
 
@@ -29,7 +29,7 @@ def pedir_preco(mensagem):
       try:
          preco = float(input(mensagem))
 
-         if preco < 0:
+         if preco <= 0:
             print("Erro: O preço deve ser maior que zero.")
             continue
 
@@ -52,13 +52,14 @@ def cadastrar_produto():
 
    produto = encontrar_produto(nome)
 
-   try: 
-    quant = pedir_quantidade("Digite a quantidade: ")
-    preco = pedir_preco("Digite o preço: ")
-    val = input("Digite a validade do produto (dd/mm/aaaa): ")
-   except ValueError:
-      print("Erro: Digite apenas números.")
-   
+   if produto:
+      print(f"O produto {nome} já esta cadastrado.")
+      return
+
+   quant = pedir_quantidade("Digite a quantidade: ")
+   preco = pedir_preco("Digite o preço: ")
+   val = input("Digite a validade do produto (dd/mm/aaaa): ")
+
    produtos.append({
    "nome": nome, 
    "quantidade": quant,
@@ -66,7 +67,7 @@ def cadastrar_produto():
    "validade": val
    })
          
-   print(f"Produto {nome}, com {quant} unidades, com valor R$ {preco} e validade {val} cadastrado com sucesso!")
+   print(f"Produto {nome}, com {quant} unidades, com valor R${preco} e validade {val} cadastrado com sucesso!")
 
 def listar_produtos():
    print("=== PRODUTOS DO ESTOQUE ===")
@@ -126,29 +127,22 @@ def registrar_venda():
    print("=== REGISTRAR VENDA ===")
    
    nome = pedir_nome("Digite o nome do produto vendido: ")
-   quant = pedir_quantidade("Digite a quantidade vendida: ")
+   produto = encontrar_produto(nome)
 
-   for produto in produtos:
+   if produto:
 
-      if produto["nome"].lower() == nome.lower(): 
-
-        encontrado = True
-
-        if produto["quantidade"] >= quant:
-
+      quant = pedir_quantidade("Digite a quantidade vendida: ")
+      if produto["quantidade"] >= quant:
          produto["quantidade"] -= quant
 
          print(f"Produto {nome} vendido com sucesso! Quantidade vendida: {quant}.")
          print(f"Quantidade restante no estoque: {produto['quantidade']}.")
 
-        else:
+      else:
             print(f"Quantidade insuficiente do produto {nome}.")
 
-        break
-
-
-   if not encontrado:
-    print(f"Produto {nome} não encontrado no estoque.")
+   else:
+      print(f"Produto {nome} não encontrado no estoque.")
 
 def buscar_produtos():
    print("=== BUSCAR PRODUTO ===")
@@ -176,60 +170,75 @@ def editar_produto():
 
    nome = pedir_nome("Digite o nome do produto que deseja alterar: ")
 
-   print("O que deseja alterar?")
-   print("1 - Nome")
-   print("2 - Quantidade")
-   print("3 - Preço")
-   print("4 - Validade")
+   produto = encontrar_produto(nome)
 
-   opcao = input("Escolha uma opção: ")
+   if produto:
 
-   if opcao == "1":
-      for produto in produtos:
-         if produto["nome"].lower() == nome.lower():
-           novo_nome = input("Digite o novo nome:")
+      print("O que deseja alterar?")
+      print("1 - Nome")
+      print("2 - Quantidade")
+      print("3 - Preço")
+      print("4 - Validade")
+      print("5 - Cancelar")
 
-           produto["nome"] = novo_nome
+      opcao = input("Escolha uma opção: ")
 
-           print(f"{nome} atualizado para {novo_nome}.")
+      if opcao == "1":
+         novo_nome = pedir_nome("Digite o novo nome: ")
 
-   elif opcao == "2":
-      for produto in produtos:
-         if produto["nome"].lower() == nome.lower():
-            nova_quant = pedir_quantidade("Digite a nova quantidade: ")
+         produto["nome"] = novo_nome
 
-            produto["quant"] = nova_quant
+         print(f"{nome} atualizado para {novo_nome}.")
 
-            print(f"{nome} com a quantidade atualizada.")
+      elif opcao == "2":
+         nova_quant = pedir_quantidade("Digite a nova quantidade: ")
 
-   elif opcao == "3":
-      for produto in produtos:
-         if produto["nome"].lower() == nome.lower():
-            novo_preco = pedir_preco("Digite o novo preço: ")
+         produto["quantidade"] = nova_quant
 
-            produto["preco"] = novo_preco
+         print(f"{nome} com a quantidade atualizada.")
 
-            print(f"{nome} com o preço atualizado.")
+      elif opcao == "3":
+         novo_preco = pedir_preco("Digite o novo preço: ")
 
-   elif opcao == "4":
-      for produto in produtos:
-         if produto["nome"].lower() == nome.lower():
-            nova_val = input("Digite a nova validade: ")
+         produto["preco"] = novo_preco
 
-            produto["val"] = nova_val
+         print(f"{nome} com o preço atualizado.")
 
-            print(f"{nome} com a validade atualizada.")
+      elif opcao == "4":
+         nova_val = input("Digite a nova validade: ").strip()
 
-   elif opcao == "5":
-      print("Edição cancelada.")
+         produto["validade"] = nova_val
 
-   else:
-      print("Opção inválida.")
+         print(f"{nome} com a validade atualizada.")
+
+      elif opcao == "5":
+         print("Edição cancelada.")
+
+      else:
+         print("Opção inválida.")
 
    else:
-     print(f"O produto {nome} não foi encontrado no estoque.")
+      print(f"O produto {nome} não foi encontrado no estoque.")
 
+def relatorio_estoque():
+   print("=== RELATÓRIO DE ESTOQUE ===")
 
+   if len(produtos) == 0:
+      print("Estoque vazio.")
+      return
+
+   total_produtos = len(produtos)
+   total_unid = 0
+   valor_tot = 0
+
+   for produto in produtos:
+      total_unid += produto["quantidade"]
+      valor_tot += produto["quantidade"] * produto["preco"]
+
+   print(f"Produtos cadastrados: {total_produtos}.")
+   print(f"Total de unidades: {total_unid}.")
+   print(f"Valor total do estoque: R${valor_tot}.")
+   
 while True:
    
    print("\n===== CONTROLE DE ESTOQUE =====")
@@ -242,11 +251,12 @@ while True:
    print("5 - Registrar venda")
    print("6 - Buscar produto")
    print("7 - Editar produto")
-   print("8 - Sair do sistema")
+   print("8 - Relatório do estoque")
+   print("9 - Sair do sistema")
 
    opcao = input("Escolha uma opção: ")
 
-   if opcao == "8":
+   if opcao == "9":
       print("Saindo do sistema...")
       break
 
@@ -271,6 +281,9 @@ while True:
    elif opcao == "7":
       editar_produto()
 
+   elif opcao == "8":
+      relatorio_estoque()
+
    else:
-      print("Opção inválida. Digite de 1 a 8, por favor.")
+      print("Opção inválida. Digite de 1 a 9, por favor.")
 
